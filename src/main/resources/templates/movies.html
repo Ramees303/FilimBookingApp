@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="en" xmlns="https://www.thymeleaf.com">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bootstrap demo</title>
+    <link href="/css/home.css" rel="stylesheet" type="text/css">
+   
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+  </head>
+  <body>
+    
+    <!-- coding starting -->
+ 
+      <!-- using fragments for navbar -->
+      
+ <div th:replace="~{navbar::nav}"></div>
+ 
+      <!-- using fragments for navbar -->
+
+    <!-- first section started -->
+     
+   <section class="moviesection">
+
+
+      <div class="container h-100">
+            
+        <div class="row h-100 align-items-center ">
+            <div class="col-md-4 text-justify">
+
+                <h1>Night Life </h1>
+               <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ipsum odio soluta nisi ab necessitatibus magni. Possimus deleniti obcaecati ducimus harum.</p>
+
+               
+
+            </div>
+
+        </div>
+    </div>
+
+
+
+    </section>
+
+     <!-- first section ended -->
+
+     <!-- action movies  section started -->
+    <section class="movienowplaying">
+ 
+     <div class="container text-center mt-3 d-flex">
+
+     
+      <div class="row mt-4 p-3">
+        <h3>Action</h3>
+       
+
+        <div  th:each="movie:${actionmovie}"  class="col-md-3">
+        <div class="card" style="width: 18rem; height: 20rem;">
+          <img th:src="'/image/'+${movie.image}" class="card-img-top" alt="..." style="height: 18rem;">
+          <div class="card-body">
+            <h5 class="card-title" th:text="${movie.name}"></h5>
+              
+            <form th:action="@{booking{id}(id=${movie.id})}" method="post">
+            <button type="submit" class="btn btn-primary">Book Now</button>
+            </form>
+          </div>
+        </div>
+        </div>
+        
+      </div>
+       
+     </div>
+
+
+    </section>
+
+
+
+     <!-- action movies section ended -->
+
+
+
+     <!-- thriller movies  section started -->
+    <section class="movienowplaying">
+ 
+     <div class="container text-center mt-3 ">
+
+     
+      <div class="row mt-4 p-3">
+        <h3 class="text-center">Thriller</h3>
+       
+
+        <div  th:each="movie:${thrillermovie}"  class="col-md-3">
+        <div class="card" style="width: 18rem; height: 20rem;">
+          <img th:src="'/image/'+${movie.image}" class="card-img-top" alt="..." style="height: 18rem;">
+          <div class="card-body">
+            <h5 class="card-title" th:text="${movie.name}"></h5>
+              
+            <form th:action="@{booking{id}(id=${movie.id})}" method="post">
+            <button type="submit" class="btn btn-primary">Book Now</button>
+            </form>
+          </div>
+        </div>
+        </div>
+        
+      </div>
+       
+     </div>
+
+
+    </section>
+
+
+
+     <!-- thriller movies section ended -->
+     
+     
+          <!-- romance movies  section started -->
+    <section class="movienowplaying">
+ 
+     <div class="container text-center mt-3 ">
+
+     
+      <div class="row mt-4 p-3">
+        <h3>Romance</h3>
+       
+
+        <div  th:each="movie:${romancemovie}"  class="col-md-3">
+        <div class="card" style="width: 18rem; height: 20rem;">
+          <img th:src="'/image/'+${movie.image}" class="card-img-top" alt="..." style="height: 18rem;">
+          <div class="card-body">
+            <h5 class="card-title" th:text="${movie.name}"></h5>
+              
+            <form th:action="@{booking{id}(id=${movie.id})}" method="post">
+            <button type="submit" class="btn btn-primary">Book Now</button>
+            </form>
+          </div>
+        </div>
+        </div>
+        
+      </div>
+       
+     </div>
+
+
+    </section>
+
+
+
+     <!-- romance movies section ended -->
+     
+          <!-- adventure movies  section started -->
+    <section class="movienowplaying">
+ 
+     <div class="container text-center mt-3 ">
+
+     
+      <div class="row mt-4 p-3">
+        <h3>Adventure</h3>
+       
+
+        <div  th:each="movie:${adventuremovie}"  class="col-md-3">
+        <div class="card" style="width: 18rem; height: 20rem;">
+          <img th:src="'/image/'+${movie.image}" class="card-img-top" alt="..." style="height: 18rem;">
+          <div class="card-body">
+            <h5 class="card-title" th:text="${movie.name}"></h5>
+              
+            <form th:action="@{booking{id}(id=${movie.id})}" method="post">
+            <button type="submit" class="btn btn-primary">Book Now</button>
+            </form>
+          </div>
+        </div>
+        </div>
+        
+      </div>
+       
+     </div>
+
+
+    </section>
+
+
+
+     <!-- adventure movies section ended -->
+
+
+
+
+
+    <!-- footer started -->
+
+    <footer class="bg-dark">
+          <div class="container text-center text-white py-2">
+          <p>Copyright &copy; 2023  All rights reserved</p>
+         
+        </div>
+    </footer>
+      <!-- footer ended -->
+
+    <!-- coding ended -->
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+  </body>
+</html>

@@ -1,0 +1,38 @@
+.login{
+    height: 100vh;
+    width: 100%;
+    background:linear-gradient(to left,rgba(0, 0, 0, 0.808),rgba(0,0,0,.3)),url(https://images.pexels.com/photos/66284/winter-nature-season-trees-66284.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1);
+    background-size: cover;
+    color: white;
+}
+
+.formalign{
+	    padding-top: 25vh;
+}
+
+.formalign1{
+	    padding-top: 6vh;
+}
+
+.size{
+	font-size: 2rem;
+}
+
+.register{
+	 height: 100vh;
+    width: 100%;
+    background:linear-gradient(to left,rgba(0, 0, 0, 0.808),rgba(0,0,0,.3)),url(https://images.pexels.com/photos/376368/pexels-photo-376368.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1);
+    background-size: cover;
+    color: white;
+}
+
+.passwordreset{
+	 height: 100vh;
+    width: 100%;
+    background:linear-gradient(to left,rgba(0, 0, 0, 0.808),rgba(0,0,0,.3)),url(https://images.pexels.com/photos/1449455/pexels-photo-1449455.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1);
+    background-size: cover;
+    color: white;
+}
+
+
+
