@@ -85,7 +85,7 @@ public class UserController {
 	  int i=0;
 		i=userservice.resetUserPassword(userdata);
 		if(i==1) {
-			return "home";
+			return "redirect:login";
 		}
 		String msg="wrong data";
 		model.addAttribute("msg",msg);

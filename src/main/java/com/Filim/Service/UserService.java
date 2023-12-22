@@ -3,6 +3,7 @@ package com.Filim.Service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.Filim.Entity.Movie;
@@ -16,9 +17,15 @@ public class UserService {
 	@Autowired
 	private UserRepository userRepository;
 	
+	@Autowired
+	private BCryptPasswordEncoder bcrypt;
+	
 
 	
 	public void saveUser(User user) {
+	
+		String encryptpassword=bcrypt.encode(user.getPassword());
+		user.setPassword(encryptpassword);
 		userRepository.save(user);
 	}
 	
@@ -27,8 +34,10 @@ public class UserService {
 		
 		
 	
-		List<User> user=userRepository.findByEmailAndPassword(email, password);
-		if(user.isEmpty()) {
+		User user=userRepository.findByEmail(email);
+		
+		bcrypt.matches(password, user.getPassword());
+		if(user==null) {
 			return 0;
 		}
 		return 1;
@@ -41,7 +50,8 @@ public class UserService {
 		User user=userRepository.findByEmail(userdata.getEmail());
 		if(user.getSecurity_question().equals(userdata.getSecurity_question())) {
 			if(user.getSecurity_answer().equals(userdata.getSecurity_answer())) {
-			         user.setPassword(userdata.getPassword());
+				     
+			         user.setPassword(bcrypt.encode(userdata.getPassword()));
 			         userRepository.save(user);
 			         return 1;
 			}
