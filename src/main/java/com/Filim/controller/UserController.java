@@ -45,8 +45,8 @@ public class UserController {
 
 
 	@PostMapping("/saveuser")
-	public String saveuserData(@ModelAttribute User userdata) {
-	       userservice.saveUser(userdata);
+	public String saveuserData(@ModelAttribute User userdata)  {
+	     userservice.saveUser(userdata);
 		return "login";
 	}
 	

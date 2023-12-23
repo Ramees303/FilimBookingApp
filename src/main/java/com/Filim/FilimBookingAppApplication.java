@@ -17,11 +17,11 @@ public class FilimBookingAppApplication {
 	
 	@Bean
 	@Scope(value="prototype")
-    public Order order() {
+    public Order order() { 
 		return new Order();
 	}
 	
-	@Bean
+	@Bean(name = "bcryptencoder")
 	@Scope(value = "prototype")
 	public BCryptPasswordEncoder bcrypt() {
 		return new BCryptPasswordEncoder();
