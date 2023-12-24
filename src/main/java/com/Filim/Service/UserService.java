@@ -22,16 +22,14 @@ public class UserService {
 	
 
 	
-	public void saveUser(User user) throws RuntimeException {
+	public User saveUser(User user) throws RuntimeException {
 		if(user==null) {
 			throw new RuntimeException("The user is null");
 		}
 	
 		String encryptpassword=bcrypt.encode(user.getPassword());
 		user.setPassword(encryptpassword);
-		
-			
-		userRepository.save(user);
+		return userRepository.save(user);
 				
 	}
 	

@@ -49,8 +49,6 @@ public class UserServiceTest {
 	@Test
 	 void saveUserTest1() {
 		when(userRepository.save(user)).thenReturn(user);
-		
-		
 		assertThrows(RuntimeException.class,()->userService.saveUser(null),"The Exception is not thrown");
 		assertDoesNotThrow(()->userService.saveUser(user),"The Exception is thrown");
 

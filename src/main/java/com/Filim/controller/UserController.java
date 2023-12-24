@@ -46,8 +46,12 @@ public class UserController {
 
 	@PostMapping("/saveuser")
 	public String saveuserData(@ModelAttribute User userdata)  {
-	     userservice.saveUser(userdata);
-		return "login";
+	     User user=userservice.saveUser(userdata);
+	     if(user!=null) {
+	    	 
+	    	 return "login";
+	     }
+	     return "error";
 	}
 	
 	
