@@ -1,134 +1,105 @@
 package com.Filim.ServiceTest;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertSame;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 import com.Filim.FilimBookingAppApplication;
 import com.Filim.Entity.User;
 import com.Filim.Service.UserService;
 import com.Filim.repository.UserRepository;
 
-@SpringBootTest(classes = FilimBookingAppApplication.class)
-public class UserServiceTest {
+/***Database Integeration Testing using H2 **/
 
-	@MockBean
-	private UserRepository userRepository;
+@PropertySource("/application.properties")
+@SpringBootTest(classes=FilimBookingAppApplication.class)
+public class UserServiceTest {
+	
+	
 	
 	@Autowired
 	private UserService userService;
 	
+	@Autowired
+	private JdbcTemplate jdbc;
+	
+	@Autowired
+	private UserRepository userRepository;
 	
 	private User user;
 	
-	
+	@BeforeEach
+	public void insertUserIntoDB() {
+		jdbc.execute("insert into user_data(name,email,password,security_question,security_answer)"
+				+ "values('draco','d@gmail.com','123','dummyquestion','dummy');");
+	}
 	
 	@BeforeEach
-	public void beforeEach() {
+	public void addDataToUser() {
 		user=new User();
-		user.setId(1);
-		user.setName("David");
+	    user.setName("dummy");
 		user.setEmail("dummy@gmail.com");
-		user.setPassword("12345");
-		user.setSecurity_question("What test is this");
-		user.setSecurity_answer("mockTest or TestDouble");
+		user.setSecurity_question("dummyquestion");
+		user.setSecurity_answer("dummy");
+		user.setPassword("456");
 	}
 	
 	
-	@DisplayName("saveUserTest-1")
+	@DisplayName("checkingSaveUser")
 	@Test
-	 void saveUserTest1() {
-		when(userRepository.save(user)).thenReturn(user);
-		assertThrows(RuntimeException.class,()->userService.saveUser(null),"The Exception is not thrown");
-		assertDoesNotThrow(()->userService.saveUser(user),"The Exception is thrown");
+	public void checkingSaveUser() {
+		assertTrue(userService.saveUser(user),"The user is not saved");
+		assertFalse(userService.saveUser(null));
+		User user=userRepository.findByEmail("dummy@gmail.com");
+		assertEquals("dummy@gmail.com", user.getEmail());
+	}
+	
+	
+	
+	@DisplayName("checkingUserLogin")
+	@Test
+	public void checkingUserlogin() {
+		
+		int i=userService.checkUserLogin("d@gmail.com", "123");
+		assertEquals(1, i);
+		
+	}
+	
+	@DisplayName("checkingresetUserpassword")
+	@Test
+	public void checkingresetUserPassword() {
+		userService.saveUser(user);
+		int num=userService.resetUserPassword(user);
+		assertEquals(1,num);
+	}
+	
+	@DisplayName("checkinggetUserdata")
+	@Test
+	public void checkinggetUserdata() {
+		user=userService.getUserdata("d@gmail.com");
+		assertEquals("draco",user.getName());
+		assertEquals("d@gmail.com",user.getEmail());
+		assertEquals("dummyquestion",user.getSecurity_question());
+	}
+	
+	
+	
+	
+	@AfterEach
+	public void deleteDataFromDB() {
+		jdbc.execute("delete from user_data");
+	}
+	
+	
+	
 
-	}
-	
-	@DisplayName("saveUserTest-2")
-	@Test
-	void checkingExceptionOnDBsaveUserTest() {
-		
-		doThrow(new RuntimeException()).when(userRepository).save(user);
-		
-	    assertThrows(RuntimeException.class,()->{userService.saveUser(user);},"The exception is not thrown");
-		
-		
-	}
-	
-	@DisplayName("checkUserLogin Test-1")
-	@Test
-	void checkUserLoginTest() {
-		when(userRepository.findByEmail("dummy@gmail.com")).thenReturn(user);
-		
-		assertEquals(1,userService.checkUserLogin(user.getEmail(),user.getPassword()),"The user is null");
-		assertThrows(RuntimeException.class,()->userService.checkUserLogin(null, "1234"),"The Exception is thrown");
-		assertThrows(RuntimeException.class,()->userService.checkUserLogin("email", null),"The Exception is thrown");
-		assertThrows(RuntimeException.class,()->userService.checkUserLogin(null, null),"The Exception is thrown");
-		assertDoesNotThrow(()->userService.checkUserLogin(user.getEmail(),user.getPassword()));
-		
-	}
-	
-	@DisplayName("checkUserLogin Test-2")
-	@Test
-	void checkingExceptionOnUserLogin(){
-		doThrow(new RuntimeException()).when(userRepository).findByEmail("dummy@gmail.com");
-		assertThrows(RuntimeException.class,()->userService.checkUserLogin("dummy@gmail.com","12345"),"The Exception is thrown");
-		
-	}
-	
-		
-	@DisplayName("resetUserPassword Test1")
-	@Test
-	void resetUserPasswordTest() {
-		when(userRepository.findByEmail("dummy@gmail.com")).thenReturn(user);
-		assertEquals(1,userService.resetUserPassword(user),"The user is null");
-		assertThrows(Exception.class,()->userService.resetUserPassword(null),"The Exception is thrown");
-		assertDoesNotThrow(()->userService.resetUserPassword(user));
-	}
-
-	
-	@DisplayName("resetUserPassword Test2")
-	@Test
-	void checkingExceptiOnfindByEmailInResetUserPasswordTest() {
-		doThrow(new RuntimeException()).when(userRepository).findByEmail("dummy@gmail.com");
-		assertThrows(RuntimeException.class,()->userService.resetUserPassword(user),"The Exception is thrown");
-		
-	}
-
-	
-	@DisplayName("resetUserPassword Test3")
-	@Test
-	void checkingExceptiOnDbSaveInResetUserPasswordTest() {
-		doThrow(new RuntimeException()).when(userRepository).save(user);
-		assertThrows(RuntimeException.class,()->userService.resetUserPassword(user),"The Exception is thrown");
-		
-	}
-	
-	@DisplayName("getUserdata Test1")
-	@Test
-	void getUserdataTest() {
-		when(userRepository.findByEmail("dummy@gmail.com")).thenReturn(user);
-		assertSame(user, userService.getUserdata("dummy@gmail.com"));
-		assertThrows(RuntimeException.class,()->userService.getUserdata(null));
-		assertDoesNotThrow(()->userService.getUserdata("harry"));
-	}
-	
-	@DisplayName("getUserdata  Test2")
-	@Test
-	void checkingExceptiOnfindByEmailIngetUserdataTest() {
-		doThrow(new RuntimeException()).when(userRepository).findByEmail("dummy@gmail.com");
-		assertThrows(RuntimeException.class,()->userService.resetUserPassword(user),"The Exception is thrown");
-		
-	}
-	
 }

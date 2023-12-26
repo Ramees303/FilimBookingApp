@@ -22,27 +22,19 @@ public class UserService {
 	
 
 	
-	public User saveUser(User user) throws RuntimeException {
+	public boolean saveUser(User user) {
 		if(user==null) {
-			throw new RuntimeException("The user is null");
+			return false;
 		}
-	
 		String encryptpassword=bcrypt.encode(user.getPassword());
 		user.setPassword(encryptpassword);
-		return userRepository.save(user);
-				
+		userRepository.save(user);
+		return true;
 	}
 	
 	
-	public int checkUserLogin(String email,String password) throws RuntimeException {
+	public int checkUserLogin(String email,String password) {
 		
-		if(email==null) {
-			throw new RuntimeException("The email is null");
-		}
-		
-		if(password==null) {
-			throw new RuntimeException("The password is null");
-		}
 	
 		User user=userRepository.findByEmail(email);
 		
@@ -53,11 +45,9 @@ public class UserService {
 	
 	
 	
-	public int resetUserPassword(User userdata) throws RuntimeException {
+	public int resetUserPassword(User userdata)  {
 		
-		if(userdata==null) {
-			throw new RuntimeException("The user is null");
-		}
+		
 		User user=userRepository.findByEmail(userdata.getEmail());
 		
 		if(user.getSecurity_question().equals(userdata.getSecurity_question())) {
@@ -74,10 +64,8 @@ public class UserService {
 	}
 	
 	
-	public User getUserdata(String email)throws RuntimeException {
-		if(email==null) {
-			throw new RuntimeException("The email from getUserdata is null");
-		}
+	public User getUserdata(String email){
+		
 		return userRepository.findByEmail(email);
 	}
 	
